@@ -108,3 +108,16 @@ If you're just getting started, this is the highest-leverage combination:
 ```
 
 These three work on every PR, require only `GITHUB_TOKEN`, and produce immediate visible output.
+
+---
+
+## Quick diagnosis guide
+
+Not sure where to start? Answer these:
+
+1. **Did your evals just fail?** → ai-workflow-evals + ai-root-cause-hints
+2. **Did a PR just merge and something broke?** → ai-pr-guardian + pr-context-enricher + ai-root-cause-hints
+3. **Are you worried about what's in your AI outputs?** → ai-output-redacter
+4. **Did costs spike?** → llm-cost-tracker + ai-root-cause-hints
+5. **Is your MCP server behaving differently?** → mcp-server-tester
+6. **Are you about to publish an agent skill?** → agent-skill-validator
