@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 
-> 🔴 **Live example:** Open any [recent PR in this repo](https://github.com/ollieb89/ai-devops-actions/pulls) to see the full suite running on itself — context summary, quality score, and root cause hints, all from `GITHUB_TOKEN`.
+> 🔴 **Live example:** Open [PR #1](https://github.com/ollieb89/ai-devops-actions/pull/1) (canonical demo) or any [recent PR](https://github.com/ollieb89/ai-devops-actions/pulls) to see the full suite running on itself — context summary, quality score, and root cause hints, all from `GITHUB_TOKEN`.
 
 > The full CI/CD layer for AI-native development — 8 GitHub Actions covering PR quality, safety, cost, infra, and behavioral testing.
 
