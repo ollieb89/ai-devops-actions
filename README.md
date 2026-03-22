@@ -22,9 +22,9 @@ This suite covers the full stack — eight GitHub Actions that work independentl
 > Most CI tells you *something broke.*
 > This system tells you **why** — and what to do next.
 
-```
-PR → Context → Safety → Evals → Cost → Failure → Root Cause → Fix → ↺
-```
+<p align="center">
+  <img src="docs/ai-reliability-loop.svg" alt="AI Reliability Loop" width="360"/>
+</p>
 
 **Three things this loop does that standard CI/CD can't:**
 

@@ -1,0 +1,99 @@
+<svg width="400" height="820" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 820">
+  <!-- Background -->
+  <rect width="400" height="820" fill="#0F172A"/>
+
+  <!-- Title -->
+  <text x="200" y="38" text-anchor="middle" fill="#F8FAFC" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" letter-spacing="0.5">AI Reliability Loop</text>
+  <text x="200" y="58" text-anchor="middle" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">CI/CD for AI systems that explains failures</text>
+
+  <!-- ===== NODES ===== -->
+
+  <!-- PR (blue) -->
+  <rect x="130" y="80" width="140" height="48" rx="10" fill="#3B82F6"/>
+  <text x="200" y="108" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">PR</text>
+
+  <!-- Arrow PR -> Context -->
+  <line x1="200" y1="128" x2="200" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Context (blue) -->
+  <rect x="130" y="150" width="140" height="48" rx="10" fill="#3B82F6"/>
+  <text x="200" y="178" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Context</text>
+
+  <!-- Arrow Context -> Safety -->
+  <line x1="200" y1="198" x2="200" y2="218" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Safety (blue) -->
+  <rect x="130" y="220" width="140" height="48" rx="10" fill="#3B82F6"/>
+  <text x="200" y="248" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Safety</text>
+
+  <!-- Arrow Safety -> Evals -->
+  <line x1="200" y1="268" x2="200" y2="288" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Evals (blue) -->
+  <rect x="130" y="290" width="140" height="48" rx="10" fill="#3B82F6"/>
+  <text x="200" y="318" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Evals</text>
+
+  <!-- Arrow Evals -> Failure (longer gap, signals transition) -->
+  <line x1="200" y1="338" x2="200" y2="368" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Failure (red) -->
+  <rect x="120" y="370" width="160" height="48" rx="10" fill="#EF4444"/>
+  <text x="200" y="398" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Failure ❌</text>
+
+  <!-- Arrow Failure -> Root Cause -->
+  <line x1="200" y1="418" x2="200" y2="448" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Root Cause (yellow, BIGGER, glow) -->
+  <!-- Glow effect -->
+  <rect x="98" y="448" width="204" height="68" rx="14" fill="#F59E0B" opacity="0.25"/>
+  <rect x="104" y="452" width="192" height="60" rx="12" fill="#F59E0B" stroke="#FCD34D" stroke-width="2"/>
+  <text x="200" y="479" text-anchor="middle" fill="#0F172A" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700">Root Cause 🧠</text>
+  <text x="200" y="499" text-anchor="middle" fill="#451A03" font-family="system-ui, -apple-system, sans-serif" font-size="10">prompt · model · data · drift</text>
+
+  <!-- Arrow Root Cause -> Fix -->
+  <line x1="200" y1="514" x2="200" y2="544" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Fix (green) -->
+  <rect x="120" y="546" width="160" height="48" rx="10" fill="#10B981"/>
+  <text x="200" y="574" text-anchor="middle" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Fix ✅</text>
+
+  <!-- ===== LOOP ARROW (Fix -> PR) ===== -->
+  <!-- Path: from Fix bottom → curve left → back up to PR left side -->
+  <path d="M 200 594 C 200 650, 60 650, 60 104 C 60 80, 120 94, 130 94"
+        stroke="#475569" stroke-width="2.5" fill="none" stroke-dasharray="6,4"
+        marker-end="url(#arrowLoop)"/>
+
+  <!-- Loop label -->
+  <text x="46" y="360" text-anchor="middle" fill="#64748B" font-family="system-ui, -apple-system, sans-serif" font-size="10" transform="rotate(-90, 46, 360)">↺ loop continues</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="30" y="690" width="340" height="112" rx="10" fill="#1E293B"/>
+  <text x="200" y="710" text-anchor="middle" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" letter-spacing="1">LEGEND</text>
+
+  <rect x="50" y="720" width="12" height="12" rx="3" fill="#3B82F6"/>
+  <text x="70" y="731" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="11">Pipeline step</text>
+
+  <rect x="50" y="740" width="12" height="12" rx="3" fill="#EF4444"/>
+  <text x="70" y="751" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="11">Failure signal</text>
+
+  <rect x="50" y="760" width="12" height="12" rx="3" fill="#F59E0B"/>
+  <text x="70" y="771" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="11">Root cause (your moat)</text>
+
+  <rect x="50" y="780" width="12" height="12" rx="3" fill="#10B981"/>
+  <text x="70" y="791" fill="#CBD5E1" font-family="system-ui, -apple-system, sans-serif" font-size="11">Actionable fix</text>
+
+  <text x="210" y="731" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">9 GitHub Actions</text>
+  <text x="210" y="751" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">441 tests</text>
+  <text x="210" y="771" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">No LLM required</text>
+  <text x="210" y="791" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="11">Just GITHUB_TOKEN</text>
+
+  <!-- ===== ARROW DEFS ===== -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowLoop" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+</svg>
