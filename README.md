@@ -83,3 +83,15 @@ Each action is MIT licensed, independently versioned, and production-ready with 
 ## Built by [ollieb89](https://github.com/ollieb89)
 
 Shipping developer tools for AI-native teams.
+
+---
+
+## Start here
+
+Not sure where to start? Follow the onboarding path:
+
+1. **[ai-pr-guardian](https://github.com/ollieb89/ai-pr-guardian)** — improve PR quality first
+2. **[llm-cost-tracker](https://github.com/ollieb89/llm-cost-tracker)** — get visibility into AI spend
+3. **[mcp-server-tester](https://github.com/ollieb89/mcp-server-tester)** — validate your MCP infra
+4. **[actions-lockfile-generator](https://github.com/ollieb89/actions-lockfile-generator)** — lock down supply chain
+5. **[agent-skill-validator](https://github.com/ollieb89/agent-skill-validator)** — ship validated agent skills
