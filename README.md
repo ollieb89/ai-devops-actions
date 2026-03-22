@@ -61,6 +61,23 @@ Each action works standalone. The [full pipeline](#full-pipeline) shows how they
 
 ---
 
+
+---
+
+## Usage paths — start with your problem
+
+Don't know which action to use? Pick your problem:
+
+| My problem | Recommended stack |
+|------------|-------------------|
+| AI outputs regressed, don't know why | [AI Debugging Stack](examples/ai-debugging-stack.yml) — evals + cost tracker + root cause hints |
+| PRs are noisy and AI-sloppy | [PR Hygiene Stack](examples/pr-hygiene-stack.yml) — context enricher + guardian + lockfile |
+| Worried about secrets leaking | [AI Safety Stack](examples/ai-safety-stack.yml) — output redacter + lockfile + root cause hints |
+| Shipping agent skills or MCP servers | agent-skill-validator + mcp-server-tester |
+| Want everything | [Full pipeline](#full-pipeline) |
+
+→ [Detailed "when to use which action" guide](docs/when-to-use.md)
+
 ## Full Pipeline
 
 ```yaml

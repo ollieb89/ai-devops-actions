@@ -1,0 +1,55 @@
+# AI Safety Stack
+# Problem: AI-generated outputs may contain secrets, PII, or leaked credentials
+# Actions: ai-output-redacter + actions-lockfile-generator + ai-root-cause-hints
+
+name: AI Safety
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Run your AI generation step (replace with your actual command)
+      - name: Generate AI outputs
+        id: generate
+        run: |
+          # Example: your AI pipeline writes to ./outputs/
+          mkdir -p outputs
+          echo "Generated content here" > outputs/response.txt
+
+      # 2. Scan outputs for secrets, tokens, PII before they leave CI
+      - id: redacter
+        uses: ollieb89/ai-output-redacter@v1.0.0
+        with:
+          path: ./outputs
+          mode: redact              # 'report' | 'redact' | 'enforce'
+          patterns: |
+            API_KEY
+            sk-
+            Bearer
+          fail-on-hits: false       # set true to block on any leak
+
+      # 3. Lock down your supply chain — pin all action SHAs
+      - uses: ollieb89/actions-lockfile-generator@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          mode: enforce
+
+      # 4. If redaction hits occurred — surface root cause
+      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+        if: steps.redacter.outputs.hits > 0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          redaction-hits: ${{ steps.redacter.outputs.hits }}
+          redact-mode: ${{ steps.redacter.outputs.mode }}
+          pr-number: ${{ github.event.pull_request.number }}

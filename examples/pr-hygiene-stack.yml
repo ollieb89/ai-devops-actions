@@ -1,0 +1,50 @@
+# PR Hygiene Stack
+# Problem: PRs are noisy, AI-generated slop is sneaking through, reviewers lack context
+# Actions: pr-context-enricher → ai-pr-guardian → actions-lockfile-generator
+
+name: PR Hygiene
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Enrich the PR with structured context for reviewers
+      - id: context
+        uses: ollieb89/pr-context-enricher@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          post-comment: true
+
+      # 2. Score and gate low-quality / AI-generated PRs
+      - id: guardian
+        uses: ollieb89/ai-pr-guardian@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 60
+          on-low-quality: comment   # or 'block' to fail the check
+
+      # 3. Enforce SHA pinning on all action references in this PR
+      - uses: ollieb89/actions-lockfile-generator@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          mode: report              # or 'enforce' to fail on unpinned actions
+
+      # 4. If quality is low + risk is high — explain why
+      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+        if: steps.guardian.outputs.score < 60 || steps.context.outputs.risk-level == 'high'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-quality-score: ${{ steps.guardian.outputs.score }}
+          risk-level: ${{ steps.context.outputs.risk-level }}
+          complexity-score: ${{ steps.context.outputs.complexity-score }}
+          pr-number: ${{ github.event.pull_request.number }}

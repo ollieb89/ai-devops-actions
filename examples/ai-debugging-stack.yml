@@ -1,0 +1,47 @@
+# AI Debugging Stack
+# Problem: AI behavior regressed and you don't know why
+# Actions: ai-workflow-evals + llm-cost-tracker + ai-root-cause-hints
+
+name: AI Debugging
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'           # daily regression check
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Run your eval suite — catch behavioral regressions
+      - id: evals
+        uses: ollieb89/ai-workflow-evals@v1.0.0
+        with:
+          eval-suite: ./evals       # path to your eval definitions
+          fail-on: none             # let root-cause-hints handle escalation
+          post-comment: false
+
+      # 2. Track what this run cost — detect budget anomalies
+      - id: costs
+        uses: ollieb89/llm-cost-tracker@v1.0.0
+        with:
+          provider: anthropic       # openai | anthropic | google
+          budget-limit: '5.00'
+          alert-on-spike: true
+
+      # 3. Correlate signals → explain why it broke
+      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          eval-failures: ${{ steps.evals.outputs.failures }}
+          eval-suite: './evals'
+          cost-spike: ${{ steps.costs.outputs.spike-multiplier }}
+          model: ${{ steps.costs.outputs.model }}
+          fail-on-findings: false   # set true to block merges on HIGH confidence hints
