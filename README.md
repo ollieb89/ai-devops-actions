@@ -1,22 +1,42 @@
 # AI DevOps Actions
 
-> End-to-end CI/CD for AI systems — from pull request to behavioral regression testing.
+> The full CI/CD layer for AI-native development — 8 GitHub Actions covering PR quality, safety, cost, infra, and behavioral testing.
 
-AI-native repos have new problems that standard CI/CD tooling doesn't cover. PRs flooded with AI slop. Unchecked LLM spend. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks.
+AI-native repos have problems that standard CI/CD doesn't solve. PRs flooded with AI slop. Unchecked LLM spend. Sensitive data leaking through AI outputs. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks. Behavioral regressions invisible until production.
 
-This suite covers the full stack — five GitHub Actions that work independently or together.
+This suite covers the full stack — eight GitHub Actions that work independently or as a pipeline.
 
 ---
 
 ## The Suite
 
+### 🔍 PR Quality & Context
+
 | Action | What it solves |
-|--------|---------------|
+|--------|----------------|
 | [**ai-pr-guardian**](https://github.com/ollieb89/ai-pr-guardian) | Scores PR quality 0–100, detects AI-generated slop, gates merges |
-| [**llm-cost-tracker**](https://github.com/ollieb89/llm-cost-tracker) | Tracks OpenAI/Anthropic/Gemini spend in CI, alerts on budget overruns |
+| [**pr-context-enricher**](https://github.com/ollieb89/pr-context-enricher) | Auto-generates rich context summaries: files, risk level, commit history, ready-to-paste AI reviewer prompt |
+
+### 🛡️ Safety & Security
+
+| Action | What it solves |
+|--------|----------------|
+| [**ai-output-redacter**](https://github.com/ollieb89/ai-output-redacter) | Scans and redacts API keys, tokens, PII, and secrets from AI-generated outputs before they leave CI |
+| [**actions-lockfile-generator**](https://github.com/ollieb89/actions-lockfile-generator) | Pins all `uses:` to full commit SHAs — prevents supply chain attacks |
+
+### 🧪 Testing & Behavioral Validation
+
+| Action | What it solves |
+|--------|----------------|
+| [**ai-workflow-evals**](https://github.com/ollieb89/ai-workflow-evals) | Runs eval suites for prompts, agents, and workflows — catches behavioral regressions before merge |
 | [**mcp-server-tester**](https://github.com/ollieb89/mcp-server-tester) | Validates MCP servers: health, protocol compliance, tool/resource discovery |
-| [**actions-lockfile-generator**](https://github.com/ollieb89/actions-lockfile-generator) | Pins all `uses:` to full SHAs — prevents supply chain attacks |
 | [**agent-skill-validator**](https://github.com/ollieb89/agent-skill-validator) | Lints and validates agent skill repos (OpenClaw, Claude Code, Codex, Gemini) |
+
+### 💰 Infrastructure & Cost
+
+| Action | What it solves |
+|--------|----------------|
+| [**llm-cost-tracker**](https://github.com/ollieb89/llm-cost-tracker) | Tracks OpenAI/Anthropic/Gemini spend in CI, alerts on budget overruns |
 
 ---
 
@@ -29,36 +49,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Enrich PR with context for AI reviewers
+      - id: context
+        uses: ollieb89/pr-context-enricher@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       # Gate AI-generated / low-quality PRs before review
-      - uses: ollieb89/ai-pr-guardian@v1
+      - uses: ollieb89/ai-pr-guardian@v1.0.0
         with:
           threshold: 60
           on-low-quality: comment
 
-      # Enforce SHA pinning on all workflow actions
-      - uses: ollieb89/actions-lockfile-generator@v1
+      # Scan AI outputs for secrets and PII before they ship
+      - uses: ollieb89/ai-output-redacter@v1.0.0
+        with:
+          path: ./outputs
+          mode: enforce
+
+      # Enforce SHA pinning on all workflow action references
+      - uses: ollieb89/actions-lockfile-generator@v1.0.0
         with:
           mode: enforce
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Catch behavioral regressions in prompts and agents
+      - uses: ollieb89/ai-workflow-evals@v1.0.0
+        with:
+          eval-suite: ./evals
+          fail-on: regression
+
       # Track what this run cost in LLM calls
-      - uses: ollieb89/llm-cost-tracker@v1
+      - uses: ollieb89/llm-cost-tracker@v1.0.0
         with:
           provider: anthropic
-          model: claude-sonnet-4
-          input-tokens: ${{ steps.ai-review.outputs.input-tokens }}
-          output-tokens: ${{ steps.ai-review.outputs.output-tokens }}
           budget-limit: '1.00'
 
-      # Validate your MCP server didn't regress
-      - uses: ollieb89/mcp-server-tester@v1
+      # Validate MCP server didn't regress
+      - uses: ollieb89/mcp-server-tester@v1.0.0
         with:
           transport: stdio
           server-command: "node dist/server.js"
-          fail-on: errors
 
       # Validate agent skills before publish
-      - uses: ollieb89/agent-skill-validator@v1
+      - uses: ollieb89/agent-skill-validator@v1.0.0
         with:
           ecosystem: auto
           fail-on: errors
@@ -69,37 +103,41 @@ jobs:
 ## Install any action independently
 
 ```yaml
-uses: ollieb89/ai-pr-guardian@v1
-uses: ollieb89/llm-cost-tracker@v1
-uses: ollieb89/mcp-server-tester@v1
-uses: ollieb89/actions-lockfile-generator@v1
-uses: ollieb89/agent-skill-validator@v1
+# PR Quality & Context
+uses: ollieb89/ai-pr-guardian@v1.0.0
+uses: ollieb89/pr-context-enricher@v1.0.0
+
+# Safety & Security
+uses: ollieb89/ai-output-redacter@v1.0.0
+uses: ollieb89/actions-lockfile-generator@v1.0.0
+
+# Testing & Behavioral Validation
+uses: ollieb89/ai-workflow-evals@v1.0.0
+uses: ollieb89/mcp-server-tester@v1.0.0
+uses: ollieb89/agent-skill-validator@v1.0.0
+
+# Infrastructure & Cost
+uses: ollieb89/llm-cost-tracker@v1.0.0
 ```
 
-Each action is MIT licensed, independently versioned, and production-ready with 48–81 tests.
+All actions are MIT licensed, independently versioned, and production-ready.
 
 ---
 
-## Built by [ollieb89](https://github.com/ollieb89)
+## Suite stats
 
-Shipping developer tools for AI-native teams.
-
----
-
-## Start here
-
-Not sure where to start? Follow the onboarding path:
-
-1. **[ai-pr-guardian](https://github.com/ollieb89/ai-pr-guardian)** — improve PR quality first
-2. **[llm-cost-tracker](https://github.com/ollieb89/llm-cost-tracker)** — get visibility into AI spend
-3. **[mcp-server-tester](https://github.com/ollieb89/mcp-server-tester)** — validate your MCP infra
-4. **[actions-lockfile-generator](https://github.com/ollieb89/actions-lockfile-generator)** — lock down supply chain
-5. **[agent-skill-validator](https://github.com/ollieb89/agent-skill-validator)** — ship validated agent skills
+| Layer | Actions | Total tests |
+|-------|---------|-------------|
+| PR Quality & Context | 2 | 86 |
+| Safety & Security | 2 | 127 |
+| Testing & Behavioral Validation | 3 | 116 |
+| Infrastructure & Cost | 1 | 48 |
+| **Total** | **8** | **377** |
 
 ---
 
-## Coming soon
+## Related tools
 
-| Action | Purpose |
-|--------|---------|
-| [**ai-workflow-evals**](https://github.com/ollieb89/ai-workflow-evals) | Run prompt/agent/workflow eval cases in CI — catch behavioral regressions before merge |
+- [**workflow-guardian**](https://github.com/ollieb89/workflow-guardian) — Workflow health monitoring and linting
+- [**ghact**](https://github.com/ollieb89/ghact) — CLI toolkit: lint workflows, audit security, check for updates
+- [**workflow-linter-vscode**](https://github.com/ollieb89/workflow-linter-vscode) — VS Code extension for real-time workflow linting
