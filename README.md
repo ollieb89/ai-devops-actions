@@ -2,73 +2,71 @@
 
 > The CI/CD layer for AI-native development.
 
-A suite of GitHub Actions that secure, validate, monitor, and control AI workflows — from PR quality gates to supply chain security.
+AI-native repos have new problems that standard CI/CD tooling doesn't cover. PRs flooded with AI slop. Unchecked LLM spend. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks.
+
+This suite covers the full stack — five GitHub Actions that work independently or together.
+
+---
 
 ## The Suite
 
-| Action | What it does | Stars |
-|--------|-------------|-------|
-| [ai-pr-guardian](https://github.com/ollieb89/ai-pr-guardian) | Detect and score AI-generated / low-quality PRs | [![GitHub stars](https://img.shields.io/github/stars/ollieb89/ai-pr-guardian?style=flat-square)](https://github.com/ollieb89/ai-pr-guardian) |
-| [llm-cost-tracker](https://github.com/ollieb89/llm-cost-tracker) | Track AI API costs in CI, alert on budget overruns | [![GitHub stars](https://img.shields.io/github/stars/ollieb89/llm-cost-tracker?style=flat-square)](https://github.com/ollieb89/llm-cost-tracker) |
-| [mcp-server-tester](https://github.com/ollieb89/mcp-server-tester) | Test MCP servers in CI: health, compliance, discovery | [![GitHub stars](https://img.shields.io/github/stars/ollieb89/mcp-server-tester?style=flat-square)](https://github.com/ollieb89/mcp-server-tester) |
-| [actions-lockfile-generator](https://github.com/ollieb89/actions-lockfile-generator) | Pin GitHub Actions to SHA, prevent supply chain attacks | [![GitHub stars](https://img.shields.io/github/stars/ollieb89/actions-lockfile-generator?style=flat-square)](https://github.com/ollieb89/actions-lockfile-generator) |
-| [agent-skill-validator](https://github.com/ollieb89/agent-skill-validator) | Lint and validate agent skill repos (OpenClaw, Claude Code, Codex) | [![GitHub stars](https://img.shields.io/github/stars/ollieb89/agent-skill-validator?style=flat-square)](https://github.com/ollieb89/agent-skill-validator) |
+| Action | What it solves |
+|--------|---------------|
+| [**ai-pr-guardian**](https://github.com/ollieb89/ai-pr-guardian) | Scores PR quality 0–100, detects AI-generated slop, gates merges |
+| [**llm-cost-tracker**](https://github.com/ollieb89/llm-cost-tracker) | Tracks OpenAI/Anthropic/Gemini spend in CI, alerts on budget overruns |
+| [**mcp-server-tester**](https://github.com/ollieb89/mcp-server-tester) | Validates MCP servers: health, protocol compliance, tool/resource discovery |
+| [**actions-lockfile-generator**](https://github.com/ollieb89/actions-lockfile-generator) | Pins all `uses:` to full SHAs — prevents supply chain attacks |
+| [**agent-skill-validator**](https://github.com/ollieb89/agent-skill-validator) | Lints and validates agent skill repos (OpenClaw, Claude Code, Codex, Gemini) |
 
-## Full Pipeline Example
+---
+
+## Full Pipeline
 
 ```yaml
 jobs:
   ai-devops:
     runs-on: ubuntu-latest
     steps:
-      # 1. Gate low-quality / AI-slop PRs
+      - uses: actions/checkout@v4
+
+      # Gate AI-generated / low-quality PRs before review
       - uses: ollieb89/ai-pr-guardian@v1
         with:
           threshold: 60
           on-low-quality: comment
 
-      # 2. Pin all workflow action refs to SHA
+      # Enforce SHA pinning on all workflow actions
       - uses: ollieb89/actions-lockfile-generator@v1
         with:
           mode: enforce
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. Track AI API costs from this run
+      # Track what this run cost in LLM calls
       - uses: ollieb89/llm-cost-tracker@v1
         with:
           provider: anthropic
           model: claude-sonnet-4
-          input-tokens: ${{ steps.ai-step.outputs.input-tokens }}
-          output-tokens: ${{ steps.ai-step.outputs.output-tokens }}
-          budget-limit: '0.50'
+          input-tokens: ${{ steps.ai-review.outputs.input-tokens }}
+          output-tokens: ${{ steps.ai-review.outputs.output-tokens }}
+          budget-limit: '1.00'
 
-      # 4. Test your MCP server
+      # Validate your MCP server didn't regress
       - uses: ollieb89/mcp-server-tester@v1
         with:
           transport: stdio
           server-command: "node dist/server.js"
+          fail-on: errors
 
-      # 5. Validate agent skills
+      # Validate agent skills before publish
       - uses: ollieb89/agent-skill-validator@v1
         with:
           ecosystem: auto
           fail-on: errors
 ```
 
-## Why this suite?
+---
 
-AI-native repos have new CI/CD needs that standard tooling doesn't cover:
-- PRs flooded with AI-generated slop
-- Unchecked LLM spend in pipelines  
-- MCP servers shipped without protocol validation
-- Action tags silently compromised via supply chain attacks
-- Agent skills published without schema validation
-
-This suite covers the full stack.
-
-## Install
-
-Each action is standalone. Use one, some, or all:
+## Install any action independently
 
 ```yaml
 uses: ollieb89/ai-pr-guardian@v1
@@ -78,10 +76,10 @@ uses: ollieb89/actions-lockfile-generator@v1
 uses: ollieb89/agent-skill-validator@v1
 ```
 
-## Built by
-
-[ollieb89](https://github.com/ollieb89) — shipping developer tools for AI-native teams.
+Each action is MIT licensed, independently versioned, and production-ready with 48–81 tests.
 
 ---
 
-*Part of the AI DevOps Actions suite. Each tool is MIT licensed, independently versioned, and production-ready.*
+## Built by [ollieb89](https://github.com/ollieb89)
+
+Shipping developer tools for AI-native teams.
