@@ -45,3 +45,27 @@ jobs:
           cost-spike: ${{ steps.costs.outputs.spike-multiplier }}
           model: ${{ steps.costs.outputs.model }}
           fail-on-findings: false   # set true to block merges on HIGH confidence hints
+
+# ── Expected output ──────────────────────────────────────────────────────────
+#
+# Job summary shows:
+#
+# Evals:
+#   ✅ 12/12 evals passed — no regressions detected
+#   OR
+#   ❌ 2/12 evals failed: customer_support_accuracy, refund_flow
+#
+# Costs:
+#   💰 Run cost: $0.42 | Budget: $5.00 | No spike detected
+#   OR
+#   ⚠️ Cost spike: 3.2x above baseline ($4.10 vs $1.28 average)
+#
+# Root cause hints (when failures detected):
+#   🔴 Eval failure likely caused by knowledge drift
+#   Confidence: HIGH
+#   Signals: eval_failure + rag_change (18% deletion)
+#   → Review deleted documents in /knowledge-base
+#   → Re-run evals with previous corpus snapshot
+#   → Pin corpus version or add change gate before eval runs
+#
+# ─────────────────────────────────────────────────────────────────────────────

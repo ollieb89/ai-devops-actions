@@ -48,3 +48,31 @@ jobs:
           risk-level: ${{ steps.context.outputs.risk-level }}
           complexity-score: ${{ steps.context.outputs.complexity-score }}
           pr-number: ${{ github.event.pull_request.number }}
+
+# ── Expected output ──────────────────────────────────────────────────────────
+#
+# On every PR, three comments are posted:
+#
+# 1. PR Context Summary (pr-context-enricher):
+#    🔍 PR #42: Add user authentication
+#    Author: @devuser | Base: main ← feature/auth
+#    5 files changed (+200/-50) | Risk: low | Complexity: 2.5/10
+#    Related issues: #10
+#    [Review checklist] [AI reviewer prompt]
+#
+# 2. PR Quality Gate (ai-pr-guardian):
+#    ✅ PR Quality Score: 82/100
+#    - Test coverage: present
+#    - Description: clear
+#    - Commits: conventional
+#
+# 3. Root Cause Hints (if score < 60 or risk = high):
+#    🔴 Eval failure likely caused by knowledge drift
+#    Confidence: HIGH | Suggested: re-run evals with previous snapshot
+#
+# Outputs available for downstream steps:
+#   steps.context.outputs.risk-level     → low | medium | high
+#   steps.guardian.outputs.score         → 0-100
+#   steps.guardian.outputs.grade         → A-F
+#
+# ─────────────────────────────────────────────────────────────────────────────

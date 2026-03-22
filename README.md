@@ -1,5 +1,12 @@
 # AI DevOps Actions
 
+[![AI DevOps Actions Suite](https://img.shields.io/badge/AI%20DevOps%20Actions-Suite-blue?logo=github)](https://github.com/ollieb89/ai-devops-actions)
+![Setup time](https://img.shields.io/badge/setup-1%20minute-brightgreen)
+![No LLM required](https://img.shields.io/badge/LLM-not%20required-informational)
+![No external API](https://img.shields.io/badge/external%20API-none-success)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+
 > The full CI/CD layer for AI-native development — 8 GitHub Actions covering PR quality, safety, cost, infra, and behavioral testing.
 
 AI-native repos have problems that standard CI/CD doesn't solve. PRs flooded with AI slop. Unchecked LLM spend. Sensitive data leaking through AI outputs. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks. Behavioral regressions invisible until production.
@@ -7,6 +14,55 @@ AI-native repos have problems that standard CI/CD doesn't solve. PRs flooded wit
 This suite covers the full stack — eight GitHub Actions that work independently or as a pipeline.
 
 ---
+
+
+---
+
+## ⚡️ 1-minute setup
+
+1. Copy this into `.github/workflows/ai-hygiene.yml` in any repo:
+
+```yaml
+name: AI PR Hygiene
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ollieb89/pr-context-enricher@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ollieb89/ai-pr-guardian@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 60
+      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+2. Open a PR.
+
+3. You'll see:
+
+```
+🔍 PR Context Summary
+Author: @you | Base: main ← feature/my-change
+5 files changed (+120/-30) | Risk: low | Complexity: 3/10
+Related issues: #42
+
+✅ PR Quality Score: 78/100
+
+🟢 No correlated failure patterns detected.
+```
+
+No API keys. No external services. Just `GITHUB_TOKEN`.
 
 
 ---

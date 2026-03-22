@@ -53,3 +53,24 @@ jobs:
           redaction-hits: ${{ steps.redacter.outputs.hits }}
           redact-mode: ${{ steps.redacter.outputs.mode }}
           pr-number: ${{ github.event.pull_request.number }}
+
+# ── Expected output ──────────────────────────────────────────────────────────
+#
+# Job summary shows:
+#   ✅ No sensitive values detected in ./outputs/ (3 files scanned)
+#   OR
+#   ❌ 2 sensitive value(s) detected and redacted
+#      - Pattern matched: sk-... (API key)
+#      - Pattern matched: Bearer eyJ... (JWT token)
+#      File: outputs/response.txt → outputs/response.redacted.txt
+#
+# If redaction hits occurred, root-cause-hints adds:
+#   🟡 Sensitive data in AI outputs — likely environmental exposure
+#   Confidence: MEDIUM
+#   → Audit prompt construction code for env var interpolation
+#
+# Outputs:
+#   steps.redacter.outputs.hits     → number of secrets found
+#   steps.redacter.outputs.mode     → report | redact | enforce
+#
+# ─────────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,40 @@
+# This repo uses its own suite for PR hygiene.
+# Proof that the tools work on real workflows.
+
+name: AI PR Hygiene (self-hosted)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: context
+        uses: ollieb89/pr-context-enricher@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          post-comment: true
+
+      - id: guardian
+        uses: ollieb89/ai-pr-guardian@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 50
+          on-low-quality: comment
+
+      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-quality-score: ${{ steps.guardian.outputs.score }}
+          risk-level: ${{ steps.context.outputs.risk-level }}
+          complexity-score: ${{ steps.context.outputs.complexity-score }}
+          pr-number: ${{ github.event.pull_request.number }}
+          post-comment: true
