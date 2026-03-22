@@ -1,5 +1,7 @@
 # Launch Posts
 
+> **Canonical demo PR:** [PR #1](https://github.com/ollieb89/ai-devops-actions/pull/1) — shows full suite output (context summary, quality score, root cause hints). Or browse [all recent PRs](https://github.com/ollieb89/ai-devops-actions/pulls) for consistency proof.
+
 ## Hacker News — Show HN
 
 **Title:**
@@ -45,7 +47,7 @@ Signals: eval_failure + rag_change (18% deletion in /docs/support/)
 
 GitHub: https://github.com/ollieb89/ai-devops-actions
 
-Happy to answer questions about the architecture, especially the correlation engine — it was the most interesting design problem.
+Happy to answer questions about the architecture — especially the correlation engine design. Curious whether these failure patterns match what you're seeing in production.
 
 ---
 
@@ -170,7 +172,7 @@ The repo dogfoods itself (PRs run the suite), so you can see real output without
 
 1-minute setup, no API key required, MIT license.
 
-Would love feedback — especially on whether the correlation rules match the failure modes you actually see.
+What am I missing? Genuinely curious whether the correlation rules match the failure modes you actually hit in production.
 
 ---
 
