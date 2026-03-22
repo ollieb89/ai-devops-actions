@@ -8,6 +8,26 @@ This suite covers the full stack — eight GitHub Actions that work independentl
 
 ---
 
+
+---
+
+## Start here
+
+**New to the suite? Pick your entry point:**
+
+| You want to... | Start with |
+|----------------|-----------|
+| Gate AI-generated PR slop | [ai-pr-guardian](https://github.com/ollieb89/ai-pr-guardian) |
+| Give AI reviewers full PR context | [pr-context-enricher](https://github.com/ollieb89/pr-context-enricher) |
+| Stop secrets leaking from AI outputs | [ai-output-redacter](https://github.com/ollieb89/ai-output-redacter) |
+| Lock down your supply chain | [actions-lockfile-generator](https://github.com/ollieb89/actions-lockfile-generator) |
+| Catch agent behavioral regressions | [ai-workflow-evals](https://github.com/ollieb89/ai-workflow-evals) |
+| Validate your MCP server in CI | [mcp-server-tester](https://github.com/ollieb89/mcp-server-tester) |
+| Publish agent skills safely | [agent-skill-validator](https://github.com/ollieb89/agent-skill-validator) |
+| Track LLM spend before it hits your card | [llm-cost-tracker](https://github.com/ollieb89/llm-cost-tracker) |
+
+Each action works standalone. The [full pipeline](#full-pipeline) shows how they compose.
+
 ## The Suite
 
 ### 🔍 PR Quality & Context
