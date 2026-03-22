@@ -1,6 +1,6 @@
 # AI DevOps Actions
 
-> The CI/CD layer for AI-native development.
+> End-to-end CI/CD for AI systems — from pull request to behavioral regression testing.
 
 AI-native repos have new problems that standard CI/CD tooling doesn't cover. PRs flooded with AI slop. Unchecked LLM spend. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks.
 
