@@ -24,6 +24,7 @@ This suite covers the full stack — eight GitHub Actions that work independentl
 | Catch agent behavioral regressions | [ai-workflow-evals](https://github.com/ollieb89/ai-workflow-evals) |
 | Validate your MCP server in CI | [mcp-server-tester](https://github.com/ollieb89/mcp-server-tester) |
 | Publish agent skills safely | [agent-skill-validator](https://github.com/ollieb89/agent-skill-validator) |
+| Understand why your AI pipeline broke | [ai-root-cause-hints](https://github.com/ollieb89/ai-root-cause-hints) |
 | Track LLM spend before it hits your card | [llm-cost-tracker](https://github.com/ollieb89/llm-cost-tracker) |
 
 Each action works standalone. The [full pipeline](#full-pipeline) shows how they compose.
@@ -150,9 +151,9 @@ All actions are MIT licensed, independently versioned, and production-ready.
 |-------|---------|-------------|
 | PR Quality & Context | 2 | 86 |
 | Safety & Security | 2 | 127 |
-| Testing & Behavioral Validation | 3 | 116 |
+| Testing & Behavioral Validation | 4 | 180 |
 | Infrastructure & Cost | 1 | 48 |
-| **Total** | **8** | **377** |
+| **Total** | **9** | **441** |
 
 ---
 
