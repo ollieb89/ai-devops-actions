@@ -95,3 +95,11 @@ Not sure where to start? Follow the onboarding path:
 3. **[mcp-server-tester](https://github.com/ollieb89/mcp-server-tester)** — validate your MCP infra
 4. **[actions-lockfile-generator](https://github.com/ollieb89/actions-lockfile-generator)** — lock down supply chain
 5. **[agent-skill-validator](https://github.com/ollieb89/agent-skill-validator)** — ship validated agent skills
+
+---
+
+## Coming soon
+
+| Action | Purpose |
+|--------|---------|
+| [**ai-workflow-evals**](https://github.com/ollieb89/ai-workflow-evals) | Run prompt/agent/workflow eval cases in CI — catch behavioral regressions before merge |
