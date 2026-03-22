@@ -18,19 +18,19 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: context
-        uses: ollieb89/pr-context-enricher@v1.0.0
+        uses: ollieb89/pr-context-enricher@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           post-comment: true
 
       - id: guardian
-        uses: ollieb89/ai-pr-guardian@v1.0.0
+        uses: ollieb89/ai-pr-guardian@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           threshold: 50
           on-low-quality: comment
 
-      - uses: ollieb89/ai-root-cause-hints@v1.0.0
+      - uses: ollieb89/ai-root-cause-hints@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-quality-score: ${{ steps.guardian.outputs.score }}
