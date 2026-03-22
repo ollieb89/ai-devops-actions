@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 
+> 🔴 **Live example:** Open any [recent PR in this repo](https://github.com/ollieb89/ai-devops-actions/pulls) to see the full suite running on itself — context summary, quality score, and root cause hints, all from `GITHUB_TOKEN`.
+
 > The full CI/CD layer for AI-native development — 8 GitHub Actions covering PR quality, safety, cost, infra, and behavioral testing.
 
 AI-native repos have problems that standard CI/CD doesn't solve. PRs flooded with AI slop. Unchecked LLM spend. Sensitive data leaking through AI outputs. MCP servers shipped without validation. Action tags silently compromised. Agent skills published without schema checks. Behavioral regressions invisible until production.
