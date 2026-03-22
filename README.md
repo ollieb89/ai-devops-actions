@@ -17,6 +17,40 @@ This suite covers the full stack — eight GitHub Actions that work independentl
 
 ---
 
+## 🧠 The AI Reliability Loop
+
+> Most CI tells you *something broke.*
+> This system tells you **why** — and what to do next.
+
+```
+PR → Context → Safety → Evals → Cost → Failure → Root Cause → Fix → ↺
+```
+
+**Three things this loop does that standard CI/CD can't:**
+
+| Stage | What it does |
+|-------|-------------|
+| 🔍 **Detect** | Catch regressions in AI *behavior* — not just code |
+| 🧠 **Explain** | Identify root cause: prompt change, model drift, data shift, cost spike |
+| 🔧 **Fix** | Turn failures into actionable feedback, automatically |
+
+**Example output when your AI pipeline breaks:**
+
+```
+❌ Eval failed
+
+Root Cause Analysis:
+→ Knowledge drift (HIGH confidence)
+→ RAG corpus changed 2 commits ago
+→ Eval suite: 3/12 assertions failed
+
+Suggested fix:
+→ Re-run evals with updated embeddings
+→ Check: ai-workflow-evals + llm-cost-tracker
+```
+
+AI systems don't fail like code — they degrade silently, drift with data, and pass tests while producing worse outputs. This is the CI layer that catches it.
+
 
 ---
 
